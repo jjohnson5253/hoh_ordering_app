@@ -1,0 +1,13 @@
+CREATE TABLE `tblorders` (
+  `user` varchar(255) NOT NULL,
+  `CANFRUT` int(8) NOT NULL,
+  `CANVEGI` int(8) NOT NULL,
+  `TUNA` int(8) NOT NULL,
+  `PB` int(8) NOT NULL,
+  `CHILI` int(8) NOT NULL,
+  `PASTA` int(8) NOT NULL,
+  `CANSOUP` int(8) NOT NULL,
+  `SNACKS` int(8) NOT NULL,
+  `BREAD` int(8) NOT NULL,
+  `PRODUCE` int(8) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
