@@ -104,7 +104,7 @@ switch($_GET["action"]) {
 <HEAD>
 <TITLE>Ordering</TITLE>
 <link href="css/style.css" type="text/css" rel="stylesheet" />
-<link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
+<link rel="icon" href="img/favicon.ico" type="image/ico">
 </HEAD>
 <BODY>
 <div id="shopping-cart">
