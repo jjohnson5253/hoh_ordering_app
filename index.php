@@ -2,6 +2,7 @@
 
 <?php
 
+// Based on example from:
 // https://phppot.com/php/simple-php-shopping-cart/
 
 session_start();
@@ -11,7 +12,7 @@ echo "user: ";
 echo $thisUser;
 echo "<br>";
 
-require_once("dbcontroller.php");
+require_once("php/dbcontroller.php");
 
 $mysqli = new mysqli('localhost', 'root', 'skate100', 'hoh_online_ordering');
 
@@ -102,8 +103,8 @@ switch($_GET["action"]) {
 <HTML>
 <HEAD>
 <TITLE>Ordering</TITLE>
-<link href="style.css" type="text/css" rel="stylesheet" />
-<link rel="shortcut icon" type="image/png" href="favicon.png"/>
+<link href="css/style.css" type="text/css" rel="stylesheet" />
+<link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
 </HEAD>
 <BODY>
 <div id="shopping-cart">
@@ -125,8 +126,8 @@ if(isset($_SESSION["cart_item"])){
     foreach ($_SESSION["cart_item"] as $item){
 		?>
 				<tr>
-				<td><img src="<?php echo $item["image"]; ?>" class="cart-item-image" /><?php echo $item["name"]; ?></td>
-				<td style="text-align:center;"><a href="index.php?action=remove&code=<?php echo $item["code"]; ?>" class="btnRemoveAction"><img src="icon-delete.png" alt="Remove Item" /></a></td>
+				<td><img src="img/<?php echo $item["image"]; ?>" class="cart-item-image" /><?php echo $item["name"]; ?></td>
+				<td style="text-align:center;"><a href="index.php?action=remove&code=<?php echo $item["code"]; ?>" class="btnRemoveAction"><img src="img/icon-delete.png" alt="Remove Item" /></a></td>
 				</tr>
 				<?php
 				$total_quantity += $item["quantity"];
@@ -153,7 +154,7 @@ else {
 	?>
 		<div class="product-item">
 			<form method="post" action="index.php?action=add&code=<?php echo $product_array[$key]["code"]; ?>">
-			<div class="product-image"><img src="<?php echo $product_array[$key]["image"]; ?>" width="100" height ="100"></div>
+			<div class="product-image"><img src="img/<?php echo $product_array[$key]["image"]; ?>" width="100" height ="100"></div>
 			<div class="product-tile-footer">
 			<div class="product-title-and-adding">
 				<?php echo $product_array[$key]["name"]; ?>

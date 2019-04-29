@@ -157,8 +157,8 @@ while($row = $result->fetch_assoc()) {
 <HTML>
 <HEAD>
 <TITLE>Employee</TITLE>
-<link href="style.css" type="text/css" rel="stylesheet" />
-<link rel="shortcut icon" type="image/png" href="favicon.png"/>
+<link href="../css/style.css" type="text/css" rel="stylesheet" />
+<link rel="shortcut icon" type="image/png" href="../img/favicon.png"/>
 </HEAD>
 <BODY>
 </BODY>
