@@ -8,7 +8,7 @@ $sql = "INSERT INTO tblusers(firstname, lastname, address,
 					city, state, zipcode, phonenumber, birthdate, 
 					gender, ethnicity, workstatus, veteran, publicassistance,
 					hearabout, schoolenrolled, householdsize, username, password) VALUES
-				 ('jake','".$_POST["lastname"]."','".$_POST["address"]."'
+				 ('".$_POST["firstname"]."','".$_POST["lastname"]."','".$_POST["address"]."'
 				 	,'".$_POST["city"]."','".$_POST["state"]."','".$_POST["zipcode"]."'
 				 	,'".$_POST["phonenumber"]."','".$_POST["birthdate"]."','".$_POST["gender"]."'
 				 	,'".$_POST["ethnicity"]."','".$_POST["workstatus"]."','".$_POST["veteran"]."'
@@ -17,6 +17,11 @@ $sql = "INSERT INTO tblusers(firstname, lastname, address,
 
 if ($mysqli->query($sql) === TRUE){
 	echo "You have successfully registered.";
+
+	echo "
+	<a href='php/login.php'>
+	<input type='submit' value='Login' />
+	</a>"
 } else {
 	echo "error: " . $sql . "<br><br>" . $mysqli->error;
 }

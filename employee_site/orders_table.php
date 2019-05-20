@@ -1,5 +1,10 @@
 <?php
 
+echo "
+<a href='users_table.php'>
+<input type='submit' value='Users' />
+</a>";
+
 // Table for current unfilled orders
 // https://stackoverflow.com/questions/17902483/show-values-from-a-mysql-database-table-inside-a-html-table-on-a-webpage
 echo "<h2>Current Unfulfilled Orders</h2>";

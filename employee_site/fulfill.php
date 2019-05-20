@@ -15,7 +15,7 @@ $mysqli->query("DELETE FROM tblorders WHERE user = '".$id."'");
 // close connection
 mysqli_close($conn);
 
-// stay on employee.php
-header('Location: employee.php');
+// stay on orders_table.php
+header('Location: orders_table.php');
 
 ?>
