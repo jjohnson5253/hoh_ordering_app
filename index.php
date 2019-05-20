@@ -5,100 +5,124 @@
 // Based on example from:
 // https://phppot.com/php/simple-php-shopping-cart/
 
-session_start();
-
-$thisUser = "Tina";
-echo "user: ";
-echo $thisUser;
-echo "<br>";
-
-require_once("php/dbcontroller.php");
-
 $mysqli = new mysqli('localhost', 'root', 'skate100', 'hoh_online_ordering');
 
-$db_handle = new DBController();
 
-if(!empty($_GET["action"])) {
-switch($_GET["action"]) {
+// var for if you can order
+$canLogin = True;
 
-	case "add":
-		$productByCode = $db_handle->runQuery("SELECT * FROM tblproduct WHERE code='" . $_GET["code"] . "'");
-		$itemArray = array($productByCode[0]["code"]=>array('name'=>$productByCode[0]["name"], 'code'=>$productByCode[0]["code"], 'quantity'=>1, 'price'=>$productByCode[0]["price"], 'image'=>$productByCode[0]["image"]));
-		
-		if(!empty($_SESSION["cart_item"])) {
-			if(in_array($productByCode[0]["code"],array_keys($_SESSION["cart_item"]))) {
-				foreach($_SESSION["cart_item"] as $k => $v) {
-						if($productByCode[0]["code"] == $k) {
-							if(empty($_SESSION["cart_item"][$k]["quantity"])) {
-								$_SESSION["cart_item"][$k]["quantity"] = 0;
+// check if user already has an order in database
+$userResult = $mysqli->query("SELECT username FROM tblusers");
+if ($userResult->num_rows > 0) {
+	while($row = $userResult->fetch_assoc()) {
+		echo $row["username"];
+		if (($row["username"] == $_POST["username"]) && ($row["password"] == $_POST["password"])){
+			$canLogin = False;
+		}
+	}
+} else{
+	$canLogin = False;
+}
+
+if($canLogin){
+
+	echo "<br>login success<br>";
+	session_start();
+
+	$thisUser = "Bobby";
+	echo "user: ";
+	echo $thisUser;
+	echo "<br>";
+
+	require_once("php/dbcontroller.php");
+
+	$db_handle = new DBController();
+
+	if(!empty($_GET["action"])) {
+	switch($_GET["action"]) {
+
+		case "add":
+			$productByCode = $db_handle->runQuery("SELECT * FROM tblproduct WHERE code='" . $_GET["code"] . "'");
+			$itemArray = array($productByCode[0]["code"]=>array('name'=>$productByCode[0]["name"], 'code'=>$productByCode[0]["code"], 'quantity'=>1, 'price'=>$productByCode[0]["price"], 'image'=>$productByCode[0]["image"]));
+			
+			if(!empty($_SESSION["cart_item"])) {
+				if(in_array($productByCode[0]["code"],array_keys($_SESSION["cart_item"]))) {
+					foreach($_SESSION["cart_item"] as $k => $v) {
+							if($productByCode[0]["code"] == $k) {
+								if(empty($_SESSION["cart_item"][$k]["quantity"])) {
+									$_SESSION["cart_item"][$k]["quantity"] = 0;
+								}
+								$_SESSION["cart_item"][$k]["quantity"] = 1;
 							}
-							$_SESSION["cart_item"][$k]["quantity"] = 1;
-						}
+					}
+				} else {
+					$_SESSION["cart_item"] = array_merge($_SESSION["cart_item"],$itemArray);
 				}
 			} else {
-				$_SESSION["cart_item"] = array_merge($_SESSION["cart_item"],$itemArray);
+				$_SESSION["cart_item"] = $itemArray;
 			}
-		} else {
-			$_SESSION["cart_item"] = $itemArray;
-		}
-	break;
+		break;
 
-	case "remove":
-		if(!empty($_SESSION["cart_item"])) {
-			foreach($_SESSION["cart_item"] as $k => $v) {
-					if($_GET["code"] == $k)
-						unset($_SESSION["cart_item"][$k]);				
-					if(empty($_SESSION["cart_item"]))
-						unset($_SESSION["cart_item"]);
+		case "remove":
+			if(!empty($_SESSION["cart_item"])) {
+				foreach($_SESSION["cart_item"] as $k => $v) {
+						if($_GET["code"] == $k)
+							unset($_SESSION["cart_item"][$k]);				
+						if(empty($_SESSION["cart_item"]))
+							unset($_SESSION["cart_item"]);
+				}
 			}
-		}
-	break;
+		break;
 
-	case "checkout":
+		case "checkout":
 
-		// check if cart is empty
-		if(!empty($_SESSION["cart_item"])){
+			// check if cart is empty
+			if(!empty($_SESSION["cart_item"])){
 
-			// var for if you can order
-			$canOrder = True;
+				// var for if you can order
+				$canOrder = True;
 
-			// check if user already has an order in database
-			$result = $mysqli->query("SELECT user FROM tblorders");
-			if ($result->num_rows > 0) {
-				while($row = $result->fetch_assoc()) {
-					if ($row["user"] == $thisUser){
-	    				echo "We already have an order placed in your name <br>";
-	    				$canOrder = False;
-	    			}
-	    		}
-			}
-			// add order to database if user does not already have a order placed
-			// https://stackoverflow.com/questions/15703608/php-mysql-query-where-x-variable
-			if($canOrder == True){
-				// start a row with user name
-				$mysqli->query("INSERT INTO `tblorders`(`user`, `CANFRUT`, `CANVEGI`, 
-					`TUNA`, `PB`, `CHILI`, `PASTA`, `CANSOUP`, `SNACKS`, `BREAD`, `PRODUCE`) VALUES
-				 ('".$thisUser."',0,0,0,0,0,0,0,0,0,0)");
-				// update the row with each item in session shopping cart
-				foreach($_SESSION["cart_item"] as $k => $v){
-					$mysqli->query("UPDATE tblorders SET ".$k." = 1 WHERE user = '".$thisUser."'");
+				// check if user already has an order in database
+				$result = $mysqli->query("SELECT user FROM tblorders");
+				if ($result->num_rows > 0) {
+					while($row = $result->fetch_assoc()) {
+						if ($row["user"] == $thisUser){
+		    				echo "We already have an order placed in your name <br>";
+		    				$canOrder = False;
+		    			}
+		    		}
+				}
+				// add order to database if user does not already have a order placed
+				// https://stackoverflow.com/questions/15703608/php-mysql-query-where-x-variable
+				if($canOrder == True){
+					// start a row with user name
+					$mysqli->query("INSERT INTO `tblorders`(`user`, `CANFRUT`, `CANVEGI`, 
+						`TUNA`, `PB`, `CHILI`, `PASTA`, `CANSOUP`, `SNACKS`, `BREAD`, `PRODUCE`) VALUES
+					 ('".$thisUser."',0,0,0,0,0,0,0,0,0,0)");
+					// update the row with each item in session shopping cart
+					foreach($_SESSION["cart_item"] as $k => $v){
+						$mysqli->query("UPDATE tblorders SET ".$k." = 1 WHERE user = '".$thisUser."'");
+					}
+
+					echo "We have processed your order <br>";
 				}
 
-				echo "We have processed your order <br>";
 			}
 
-		}
+			// Unset cart
+			unset($_SESSION["cart_item"]);
 
-		// Unset cart
-		unset($_SESSION["cart_item"]);
+		break;	
 
-	break;	
-
-	case "empty":
-		unset($_SESSION["cart_item"]);
-	break;	
+		case "empty":
+			unset($_SESSION["cart_item"]);
+		break;	
+	}
+	}
+} else{
+	echo "Could not login";
 }
-}
+
 ?>
 <HTML>
 <HEAD>
