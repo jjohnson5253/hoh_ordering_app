@@ -19,9 +19,9 @@ if ($mysqli->query($sql) === TRUE){
 	echo "You have successfully registered.";
 
 	echo "
-	<a href='php/login.php'>
+	<a href='login.php'>
 	<input type='submit' value='Login' />
-	</a>"
+	</a>";
 } else {
 	echo "error: " . $sql . "<br><br>" . $mysqli->error;
 }
